@@ -78,11 +78,13 @@ include 'addproduct.php';
                        
                         <th>reference</th>
                         <th>libelle</th>
-                        <th>prix</th>
-                        <th>quantite min</th>
-                        <th>quantite en stock</th>
+                        <th>prix(DH)</th>
+                        <th>quantite min(KG)</th>
+                        <th>quantite max(KG)</th>
+                        <th>quantite en stock(KG)</th>
                         <th>categorie</th>
                         <th>Operations</th>
+                        <th>Notification</th>
                         </tr>
                 </thead>
                 <?php
@@ -92,19 +94,29 @@ $conn = mysqli_connect("localhost","root","","mydata");
               $sql = "SELECT * FROM produit";
               $result = $conn-> query($sql);
 
-              if($result-> num_rows > 0){
+              if($result-> num_rows > 0  ){
                   while ($row = $result-> fetch_assoc()){
                       ?>
             <td ><?php echo $row["reference"] ?></td>
               <td ><?php echo $row["libelle"] ?></td>
               <td ><?php echo $row["prix_unitaire"] ?></td>
               <td ><?php echo $row["quantite_min"] ?></td>
+              <td ><?php echo $row["quantite_max"] ?></td>
+              
+
+
               <td ><?php echo $row["quantite_stock"] ?></td>
+              
               <td ><a href="categorie.php?categorie=<?php echo $row["categorie"] ?>"><?php echo $row["categorie"] ?></a></td>
               <td>
-              <a href="" class="edit" > <a name="" id="" class="btn btn-secondary" href='update.php?id=<?php echo$row["reference"]?>' role="button">Modifier</a>  </a>
+              <a href="" class="edit" > <a name=""  class="btn btn-secondary" href='update.php?id=<?php echo$row["reference"]?>' role="button">Modifier</a>  </a>
 
-              <a href="" class="delete" name="reference"> <a name="" id="" class="btn btn-danger" href='delete.php?id=<?php echo$row["reference"]?>' role="button">Supprimer</a> </a></td>
+              <a href="" class="delete" name="reference"> <a name=""  class="btn btn-danger" href='delete.php?id=<?php echo$row["reference"]?>' role="button">Supprimer</a> </a></td>
+              <td><?php 
+              if($row["quantite_stock"]<$row["quantite_min"]){
+                echo "<h4><span class='badge badge-danger'>stock insuffisant</span></h1>";
+              }
+              ?></td>
               </tr>
               <?php
 }

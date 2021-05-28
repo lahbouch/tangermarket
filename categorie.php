@@ -61,15 +61,18 @@ include 'addproduct.php';
                         <th>libelle</th>
                         <th>prix</th>
                         <th>quantite min</th>
+                        <th>quantite max</th>
                         <th>quantite en stock</th>
                         <th>categorie</th>
                         <th>Operations</th>
+                        <th>Notification</th>
                         </tr>
                 </thead>
                 <?php
 
 $conn = mysqli_connect("localhost","root","","mydata");
-              $categorie = $_GET['categorie'];
+              $categorie = $_GET['categorie']; 
+              
               $sql = "SELECT *  FROM produit WHERE categorie='$categorie'";
               $result = $conn-> query($sql);
 
@@ -80,15 +83,28 @@ $conn = mysqli_connect("localhost","root","","mydata");
               <td ><?php echo $row["libelle"] ?></td>
               <td ><?php echo $row["prix_unitaire"] ?></td>
               <td ><?php echo $row["quantite_min"] ?></td>
+              <td ><?php echo $row["quantite_max"] ?></td>
               <td ><?php echo $row["quantite_stock"] ?></td>
               <td ><?php echo $row["categorie"] ?></td>
               <td>
               <a href="" class="edit" > <a name="" id="" class="btn btn-secondary" href='update.php?id=<?php echo$row["reference"]?>' role="button">Modifier</a>  </a>
 
               <a href="" class="delete" name="reference"> <a name="" id="" class="btn btn-danger" href='deletecategorie.php?id=<?php echo$row["reference"]?>' role="button">Supprimer</a> </a></td>
+              <td><?php 
+              if($row["quantite_stock"]<$row["quantite_min"]){
+                echo "<h4><span class='badge badge-danger'>stock insuffisant</span></h1>";
+              }
+              ?></td>
               </tr>
+
+              
               <?php
+              
 }
+
+
+
+
               }
               
               

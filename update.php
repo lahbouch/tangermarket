@@ -9,14 +9,14 @@ $conn = mysqli_connect("localhost","root","","mydata");
 $id =$_GET['id'];
 
 $quantitestock = "";
-
+$prixunitaire="";
 $result = mysqli_query($conn, "SELECT * FROM produit WHERE reference =$id");
 while($row=mysqli_fetch_array($result)){
 
 
     $quantitestock=$row["quantite_stock"];
-    $quantitemin=$row["quantite_min"];
     $prixunitaire=$row["prix_unitaire"];
+    
 
 }
 
@@ -29,15 +29,15 @@ while($row=mysqli_fetch_array($result)){
     <label for="formGroupExampleInput2">quantite stock</label>
     <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="quantite stock" name="quantite_stock" value="<?php echo  $quantitestock ?>">
     <br>
-    <label for="formGroupExampleInput2">quantite min</label>
-    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="quantite min" name="quantite_min" value="<?php echo  $quantitemin ?>">
-    <br>
     <label for="formGroupExampleInput2">prix</label>
     <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="prix" name="prix_unitaire" value="<?php echo  $prixunitaire ?>">
     <br>
     <div class="d-flex justify-content-center">
     <input type="submit" class="btn btn-success" name="update" value="update" >
+
     </div>
+    <a href="dashbord.php" >Return</a>
+
   </div>
   
 </form>
@@ -45,7 +45,7 @@ while($row=mysqli_fetch_array($result)){
 
 <?php
                     if(isset($_POST["update"])){
-                        mysqli_query($conn,"UPDATE produit SET  quantite_stock='$_POST[quantite_stock]' , prix_unitaire='$_POST[prix_unitaire]', quantite_min='$_POST[quantite_min]'   WHERE reference=$id");
+                        mysqli_query($conn,"UPDATE produit SET  quantite_stock='$_POST[quantite_stock]' , prix_unitaire='$_POST[prix_unitaire]'   WHERE reference=$id");
                       ?>  
                       <script type="text/javascript">
                 window.location="dashbord.php";
