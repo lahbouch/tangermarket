@@ -17,7 +17,9 @@ include 'addproduct.php';
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 
 </head>
 <body>
@@ -61,7 +63,7 @@ include 'addproduct.php';
 
     </form>
 
-
+   
 
 
 
@@ -69,6 +71,25 @@ include 'addproduct.php';
 </div>
 
 <div class="table-wrapper p-4" style="background-color:white;border-radius: 10px;padding:10px;">
+<?php
+ if(isset($_POST['search'])){
+  $querystring = $_POST['search'];
+  $sql = "SELECT * FROM produit WHERE libelle LIKE '%$querystring%'";
+} else {
+  echo "item not found";
+}
+?>
+<form action="" method="POST">
+<div class="input-group d-flex justify-content-center p-3">
+  <div class="form-outline">
+    <input type="search" id="form1" class="form-control" />
+  </div>
+  <button type="submit" class="btn btn-dark">
+    <i class="fas fa-search"></i>
+  </button>
+</div>
+</form>
+
             <div class="table-title">
                 
             </div>
@@ -81,7 +102,14 @@ include 'addproduct.php';
                         <th>prix(DH)</th>
                         <th>quantite min(KG)</th>
                         <th>quantite max(KG)</th>
-                        <th>quantite en stock(KG)</th>
+                        <th>
+                        <!-- //DESC -->
+                         <a href="?order=quantite_stock&&sort=DESC"> <i class="fas fa-arrow-up "></i></a>
+                         &#160;
+                         <!-- //ASC -->
+
+                         <a href="?order=quantite_stock&&sort=ASC"><i class="fas fa-arrow-down "></i></a>
+                         &#160;quantite en stock(KG)</a></th>
                         <th>categorie</th>
                         <th>Operations</th>
                         <th>Notification</th>
@@ -90,11 +118,31 @@ include 'addproduct.php';
                 <?php
 
 $conn = mysqli_connect("localhost","root","","mydata");
-              
-              $sql = "SELECT * FROM produit";
-              $result = $conn-> query($sql);
+             
 
+               if(isset($_GET['order'])){
+                 $order = $_GET['order'];
+               }else{
+                 $order = 'quantite_stock';
+               }
+
+               if(isset($_GET['sort'])){
+                 $sort = $_GET['sort']; 
+                
+                 
+
+               } else{
+                                  $sort = 'DESC';
+
+
+                
+               }
+               
+              $sql = "SELECT * FROM produit ORDER BY $order $sort   ";
+              
+              $result = $conn-> query($sql);
               if($result-> num_rows > 0  ){
+               
                   while ($row = $result-> fetch_assoc()){
                       ?>
             <td ><?php echo $row["reference"] ?></td>
@@ -120,6 +168,8 @@ $conn = mysqli_connect("localhost","root","","mydata");
               </tr>
               <?php
 }
+              } else {
+                echo "<h1><span class='badge badge-info d-flex justify-content-center'  >  No data </span> <h1>";
               }
               
               
